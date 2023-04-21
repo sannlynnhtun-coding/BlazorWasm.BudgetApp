@@ -1,0 +1,16 @@
+﻿@using System.Net.Http
+@using System.Net.Http.Json
+@using BlazorWasm.BudgetApp.Services;
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.AspNetCore.Components.WebAssembly.Http
+@using Microsoft.JSInterop
+@using BlazorWasm.BudgetApp
+@using BlazorWasm.BudgetApp.Models
+@using BlazorWasm.BudgetApp.Shared
+@using Newtonsoft.Json
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject NavigationManager nav
+@inject IDbService db

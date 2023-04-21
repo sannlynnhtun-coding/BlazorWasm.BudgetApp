@@ -1,0 +1,190 @@
+﻿@if (Model != null)
+{
+    <div class="table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Budget</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.lstExpense != null && Model.lstExpense.Count > 0)
+                {
+                    foreach (var item in Model.lstExpense)
+                    {
+                        <tr>
+                            <td>
+                                @(
+                                    item.ExpenseName
+                                    )
+                            </td>
+                            <td>
+                                $@(
+                                   item.Amount
+                                   )
+                            </td>
+                            <td>
+                                @(
+                                    item.ExpenseDateTime
+                                    )
+                            </td>
+                            <td>
+                                <a href="javascript:void(0)"
+                                   style="--accent: 0 65% 50%;">
+                                    @(lstBudgetCategory.FirstOrDefault(x => x.BudgetId == item.BudgetId)?.BudgetName)
+                                </a>
+                            </td>
+                            <td>
+                                <button type="button"
+                                        class="btn btn-warning delete-btn"
+                                        data-delete-id="@(item.ExpenseId)"
+                                        data-budget-id="@(item.BudgetId)"
+                                        data-current-page="@Model.CurrentPageNo"
+                                        aria-label="Delete test expense">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         viewBox="0 0 24 24"
+                                         fill="currentColor"
+                                         aria-hidden="true"
+                                         width="20">
+                                        <path fill-rule="evenodd"
+                                              d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <nav>
+        <ul class="pagination">
+            <li class="page-item active">
+                <a onclick="previous('', @Model.CurrentPageNo - 1)" class="page-link" href="javascript:void(0)" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+            @{
+                bool firstDesign = Model.CurrentPageNo <= 3 || Model.CurrentPageNo >= Model.TotalPageNo - 2;
+                bool secondDesign = !firstDesign;
+            }
+            @if (firstDesign)
+            {
+                @*<< 1 2 3 4 ... 38 39 40 >>*@
+                int leftEndPageNo = 4;
+                bool rightEndPageNoExist = Model.TotalPageNo - 3 > leftEndPageNo;
+                if (!rightEndPageNoExist)
+                {
+                    leftEndPageNo = Model.TotalPageNo;
+                }
+                @for (int i = 1; i <= leftEndPageNo; i++)
+                {
+                    if (i == Model.CurrentPageNo)
+                    {
+                        <li class="page-item active">
+                            <a class="page-link" href="javascript:void(0)">@i</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a onclick="getData('', @i)" class="page-link" href="javascript:void(0)">@i</a>
+                        </li>
+                    }
+                }
+                @if (rightEndPageNoExist)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0)">...</a>
+                    </li>
+                    @for (int i = Model.TotalPageNo - 3; i <= Model.TotalPageNo; i++)
+                    {
+                        if (i == Model.CurrentPageNo)
+                        {
+                            <li class="page-item active">
+                                <a class="page-link" href="javascript:void(0)">@i</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <a onclick="getData('', @i)" class="page-link" href="javascript:void(0)">@i</a>
+                            </li>
+                        }
+                    }
+                }
+            }
+            else if (secondDesign)
+            {
+                <li class="page-item">
+                    <a onclick="getData('', 1)" class="page-link" href="javascript:void(0)">1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="javascript:void(0)">...</a>
+                </li>
+                @for (int i = Model.CurrentPageNo - 2; i <= Model.CurrentPageNo + 2; i++)
+                {
+                    if (i == Model.CurrentPageNo)
+                    {
+                        <li class="page-item active">
+                            <a class="page-link" href="javascript:void(0)">@i</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a onclick="getData('', @i)" class="page-link" href="javascript:void(0)">@i</a>
+                        </li>
+                    }
+                }
+                <li class="page-item">
+                    <a class="page-link" href="javascript:void(0)">...</a>
+                </li>
+                <li class="page-item">
+                    <a onclick="getData('', @Model.TotalPageNo)" class="page-link" href="javascript:void(0)">@Model.TotalPageNo</a>
+                </li>
+            }
+            @if (Model.CurrentPageNo != Model.TotalPageNo)
+            {
+                <li class="page-item active">
+                    <a onclick="next('', @Model.CurrentPageNo + 1)" class="page-link" href="javascript:void(0)" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
+@code {
+    [Parameter]
+    public BudgetExpenseResponseDataModel Model { get; set; }
+
+    List<BudgetCategoryDataModel> lstBudgetCategory = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await BindBudgetCategory();
+    }
+
+    async Task BindBudgetCategory()
+    {
+        var lst = await localStorage.GetItemAsync<List<BudgetDataModel>>("Tbl_Budget");
+        lstBudgetCategory = lst.Select(x => new BudgetCategoryDataModel
+            {
+                BudgetId = x.BudgetId,
+                BudgetName = x.BudgetName
+            }).ToList();
+        lstBudgetCategory.Insert(0, new BudgetCategoryDataModel
+            {
+                BudgetId = null,
+                BudgetName = "--Select One--"
+            });
+    }
+}
