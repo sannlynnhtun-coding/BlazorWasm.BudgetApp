@@ -1,0 +1,137 @@
+﻿@if (Model != null){
+<div class="budgets">
+    @if(Model.lstBudget != null && Model.lstBudget.Count > 0)
+    {
+    @foreach (var item in Model.lstBudget)
+    {
+       @* var jsonStr = item.ToJson();*@
+        <div class="budget" style="-accent: 34 65% 50%;">
+            <div class="progress-text">
+                <h3>@(item.BudgetName)</h3>
+                <p>$@(item.Budget) Budgeted</p>
+            </div>
+            <progress max="400000" value="0">0%</progress>
+            <div class="progress-text">
+                <small>$@(item.BudgetName) spent</small>
+                <small>$@(item.Budget) remaining</small>
+            </div>
+            <div class="flex-sm">
+                <button type="button" class="btn btn-dark viewDetail" data-item="">
+                    <span>View Details</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                         stroke="currentColor" aria-hidden="true" width="20">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    }
+    }
+</div>
+
+<nav>
+    <ul class="pagination">
+        <li class="page-item active">
+            <a onclick="BudgetPrevious(@Model.CurrentPageNo - 1)" class="page-link" href="javascript:void(0)" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+        @{
+            bool firstDesign = Model.CurrentPageNo <= 3 || Model.CurrentPageNo >= Model.TotalPageNo - 2;
+            bool secondDesign = !firstDesign;
+        }
+        @if (firstDesign)
+        {
+            @*<< 1 2 3 4 ... 38 39 40 >>*@
+            int leftEndPageNo = 4;
+            bool rightEndPageNoExist = Model.TotalPageNo - 3 > leftEndPageNo;
+            if (!rightEndPageNoExist)
+            {
+                leftEndPageNo = Model.TotalPageNo;
+            }
+            @for (int i = 1; i <= leftEndPageNo; i++)
+            {
+                if (i == Model.CurrentPageNo)
+                {
+                    <li class="page-item active">
+                        <a class="page-link" href="javascript:void(0)">@i</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a onclick="BudgetData(@i)" class="page-link" href="javascript:void(0)">@i</a>
+                    </li>
+                }
+            }
+            @if (rightEndPageNoExist)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="javascript:void(0)">...</a>
+                </li>
+                @for (int i = Model.TotalPageNo - 3; i <= Model.TotalPageNo; i++)
+                {
+                    if (i == Model.CurrentPageNo)
+                    {
+                        <li class="page-item active">
+                            <a class="page-link" href="javascript:void(0)">@i</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a onclick="BudgetData(@i)" class="page-link" href="javascript:void(0)">@i</a>
+                        </li>
+                    }
+                }
+            }
+        }
+        else if (secondDesign)
+        {
+            <li class="page-item">
+                <a onclick="BudgetData(1)" class="page-link" href="javascript:void(0)">1</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="javascript:void(0)">...</a>
+            </li>
+            @for (int i = Model.CurrentPageNo - 2; i <= Model.CurrentPageNo + 2; i++)
+            {
+                if (i == Model.CurrentPageNo)
+                {
+                    <li class="page-item active">
+                        <a class="page-link" href="javascript:void(0)">@i</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a onclick="BudgetData(@i)" class="page-link" href="javascript:void(0)">@i</a>
+                    </li>
+                }
+            }
+            <li class="page-item">
+                <a class="page-link" href="javascript:void(0)">...</a>
+            </li>
+            <li class="page-item">
+                <a onclick="BudgetData(@Model.TotalPageNo)" class="page-link" href="javascript:void(0)">@Model.TotalPageNo</a>
+            </li>
+        }
+        @if (Model.CurrentPageNo != Model.TotalPageNo)
+        {
+            <li class="page-item active">
+                <a onclick="BudgetNext(@Model.CurrentPageNo + 1)" class="page-link" href="javascript:void(0)" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>
+    }
+@code {
+    [Parameter]
+    public BudgetResponseDataModel Model { get; set; }
+}

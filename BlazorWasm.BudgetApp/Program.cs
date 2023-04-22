@@ -10,7 +10,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddBlazoredLocalStorageAsSingleton();
-//builder.Services.AddSingleton<IDbService, LocalStorageService>();
-builder.Services.AddSingleton<IDbService, ApiService>();
+builder.Services.AddSingleton<IDbService, LocalStorageService>();
+//builder.Services.AddSingleton<IDbService, ApiService>();
 
 await builder.Build().RunAsync();

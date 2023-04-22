@@ -1,6 +1,6 @@
 ﻿namespace BlazorWasm.BudgetApp.Services
 {
-    public class ApiService : IDbService
+    public class ApiService /*: IDbService*/
     {
         public Task<string> GetUserName()
         {
