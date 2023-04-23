@@ -176,6 +176,7 @@
     async Task BindBudgetCategory()
     {
         var lst = await localStorage.GetItemAsync<List<BudgetDataModel>>("Tbl_Budget");
+        lst ??= new List<BudgetDataModel>();
         lstBudgetCategory = lst.Select(x => new BudgetCategoryDataModel
             {
                 BudgetId = x.BudgetId,

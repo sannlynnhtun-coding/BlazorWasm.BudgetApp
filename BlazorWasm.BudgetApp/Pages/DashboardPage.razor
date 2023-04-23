@@ -14,7 +14,7 @@
                             <label for="newBudget">Budget Name</label>
                             <input type="text"
                                    name="newBudget"
-                                   @bind-value="Budget.BudgetName"
+                            @bind-value="Budget.BudgetName"
                                    placeholder="e.g., Groceries"
                                    required="" />
                         </div>
@@ -23,7 +23,7 @@
                             <input type="number"
                                    step="0.01"
                                    name="newBudgetAmount"
-                                   @bind-value="Budget.Budget"
+                            @bind-value="Budget.Budget"
                                    placeholder="e.g., $350"
                                    required=""
                                    inputmode="decimal" />
@@ -54,7 +54,7 @@
                                 <label for="newExpense">Expense Name</label>
                                 <input type="text"
                                        name="newExpense"
-                                       @bind-value="Expense.ExpenseName"
+                                @bind-value="Expense.ExpenseName"
                                        placeholder="e.g., Coffee"
                                        required="" />
                             </div>
@@ -64,7 +64,7 @@
                                        step="0.01"
                                        inputmode="decimal"
                                        name="newExpenseAmount"
-                                       @bind-value="Expense.Amount"
+                                @bind-value="Expense.Amount"
                                        placeholder="e.g., 3.50"
                                        required="" />
                             </div>
@@ -72,7 +72,7 @@
                         <div class="grid-xs">
                             <label for="newExpenseBudget">Budget Category</label>
                             <select name="newExpenseBudget"
-                                    @bind="Expense.BudgetId"
+                            @bind="Expense.BudgetId"
                                     required="">
                                 @foreach (var item in lstBudgetCategory)
                                 {
@@ -98,9 +98,9 @@
                 </div>
                 @*<div id="BudgetDetail"></div>*@
                 <div class="grid-md">
-                    @if(BudgetList != null)
+                    @if (BudgetList != null)
                     {
-                        <RecentBudgetListPage Model="BudgetList"/>
+                        <RecentBudgetListPage Model="BudgetList" />
                     }
                 </div>
                 <div class="grid-md">
@@ -132,6 +132,7 @@
         }
         await BindBudgetCategory();
         await GetRecentExpenses();
+        await GetRecentBudget();
     }
 
     async Task CreateBudget()
@@ -145,8 +146,7 @@
         Budget = new BudgetDataModel();
 
         await BindBudgetCategory();
-        GetRecentBudget();
-        //StateHasChanged();
+        await GetRecentBudget();
     }
 
     async Task BindBudgetCategory()
@@ -157,17 +157,26 @@
 
     async Task AddExpense()
     {
+        if (Expense.ExpenseName.IsNullOrEmpty())
+            return;
+        if (Expense.Amount <= 0)
+            return;
+        if (!lstBudgetCategory.Any(x => x.BudgetId == Expense.BudgetId))
+            return;
+
         var lst = await localStorage.GetItemAsync<List<BudgetExpenseDataModel>>("Tbl_Expense");
         lst ??= new();
         lst.Add(Expense);
         await localStorage.SetItemAsync<List<BudgetExpenseDataModel>>("Tbl_Expense", lst);
         Expense = new();
         await GetRecentExpenses();
+        await GetRecentBudget();
     }
 
     async Task GetRecentExpenses()
     {
         var lst = await localStorage.GetItemAsync<List<BudgetExpenseDataModel>>("Tbl_Expense");
+        lst ??= new List<BudgetExpenseDataModel>();
         int count = lst.Count();
         int rowCount = 5;
         int totalPageNo = count / rowCount;
@@ -186,20 +195,22 @@
 
     async Task GetRecentBudget()
     {
-        var lst = await localStorage.GetItemAsync<List<BudgetDataModel>>("Tbl_Budget");
-        int count = lst.Count();
-        int rowCount = 5;
-        int totalPageNo = count / rowCount;
-        int result = count % rowCount;
-        if (result > 0)
-            totalPageNo++;
-        BudgetList = new BudgetResponseDataModel
-            {
-                CurrentPageNo = 1,
-                lstBudget = lst,
-                RowCount = rowCount,
-                TotalPageNo = totalPageNo,
-                TotalRowCount = count
-            };
+        //var lst = await localStorage.GetItemAsync<List<BudgetDataModel>>("Tbl_Budget");
+        //int count = lst.Count();
+        //int rowCount = 4;
+        //int totalPageNo = count / rowCount;
+        //int result = count % rowCount;
+        //if (result > 0)
+        //    totalPageNo++;
+        //BudgetList = new BudgetResponseDataModel
+        //    {
+        //        CurrentPageNo = 1,
+        //        lstBudget = lst,
+        //        RowCount = rowCount,
+        //        TotalPageNo = totalPageNo,
+        //        TotalRowCount = count
+        //    };
+        var result = await db.BudgetPagination(1, 4);
+        BudgetList = result;
     }
 }

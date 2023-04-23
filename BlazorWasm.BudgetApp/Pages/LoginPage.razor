@@ -63,13 +63,19 @@
         UserName = await db.GetUserName();
         if (UserName != null && !string.IsNullOrEmpty(UserName))
         {
-            nav.NavigateTo("/Dashboard");
+            await CheckData();
         }
     }
 
     async Task Login()
     {
         await db.SetUserName(UserName);
-        nav.NavigateTo("/CreateBudget");
+        await CheckData();
+    }
+
+    async Task CheckData()
+    {
+        var lst = await db.GetBudgetCategory();
+        nav.NavigateTo(lst.Count >= 1 ? "/CreateBudget" : "/Dashboard");
     }
 }
