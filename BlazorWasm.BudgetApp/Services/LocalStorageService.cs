@@ -32,6 +32,13 @@ namespace BlazorWasm.BudgetApp.Services
             return lst;
         }
 
+        public async Task<BudgetDataModel> GetBudget(string guid)
+        {
+            var lst = await localStorage.GetItemAsync<List<BudgetDataModel>>("Tbl_Budget");
+            lst ??= new();
+            return lst.FirstOrDefault(x=> x.BudgetId == new Guid(guid));
+        }
+
         public async Task<List<BudgetExpenseDataModel>> GetExpenseList(Guid guid)
         {
             var result = await localStorage.GetItemAsync<List<BudgetExpenseDataModel>>("Tbl_Expense");

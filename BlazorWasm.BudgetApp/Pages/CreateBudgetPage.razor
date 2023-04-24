@@ -57,6 +57,13 @@
         {
             nav.NavigateTo("/");
         }
+        await CheckData();
+    }
+
+    async Task CheckData()
+    {
+        var lst = await db.GetBudgetCategory();
+        nav.NavigateTo(lst.Count <= 1 ? "/CreateBudget" : "/Dashboard");
     }
 
     async Task CreateBudget()
