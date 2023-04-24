@@ -170,7 +170,6 @@
         await localStorage.SetItemAsync<List<BudgetExpenseDataModel>>("Tbl_Expense", lst);
         Expense = new();
         await GetRecentExpenses();
-        await GetRecentBudget();
     }
 
     async Task GetRecentExpenses()
