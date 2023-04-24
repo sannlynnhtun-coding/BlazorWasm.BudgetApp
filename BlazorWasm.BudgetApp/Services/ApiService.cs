@@ -27,6 +27,11 @@ namespace BlazorWasm.BudgetApp.Services
             throw new NotImplementedException();
         }
 
+        public Task<BudgetDataModel> GetBudget(string guid)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<BudgetCategoryDataModel>> GetBudgetCategory()
         {
             var result = await _localStorageService.GetItemAsync<List<BudgetDataModel>>("Tbl_Budget");

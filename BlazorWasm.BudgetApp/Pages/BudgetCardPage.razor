@@ -16,7 +16,7 @@
             <small>$@(remaining) remaining</small>
         </div>
         <div class="flex-sm">
-            <button type="button" class="btn btn-dark viewDetail" data-item="">
+            <button type="button" class="btn btn-dark" @onclick="() => ViewDetail(Budget)">
                 <span>View Details</span>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                      stroke="currentColor" aria-hidden="true" width="20">
@@ -38,5 +38,10 @@
     {
         if (Budget != null)
             lstBudgetExpense = await db.GetExpenseList(Budget.BudgetId);
+    }
+
+    void ViewDetail(BudgetDataModel budget)
+    {
+        nav.NavigateTo($"/BudgetDetail/{budget.BudgetId}");
     }
 }

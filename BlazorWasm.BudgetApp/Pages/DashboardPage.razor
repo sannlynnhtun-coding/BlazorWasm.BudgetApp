@@ -134,12 +134,21 @@
 
     async Task CreateBudget()
     {
-        List<BudgetDataModel> lst = await localStorage.GetItemAsync<List<BudgetDataModel>>("Tbl_Budget");
-        lst ??= new();
-        Budget.UserId = UserName;
-        Budget.BudgetCreationDate = DateTime.Now;
-        lst.Add(Budget);
-        await localStorage.SetItemAsync<List<BudgetDataModel>>("Tbl_Budget", lst);
+        //List<BudgetDataModel> lst = await localStorage.GetItemAsync<List<BudgetDataModel>>("Tbl_Budget");
+        //lst ??= new();
+        //Budget.UserId = UserName;
+        //Budget.BudgetCreationDate = DateTime.Now;
+        //lst.Add(Budget);
+        //await localStorage.SetItemAsync<List<BudgetDataModel>>("Tbl_Budget", lst);
+
+        await db.AddBudget(Budget);
+        for (int i = 1; i <= 1000; i++)
+        {
+            Budget.BudgetId = Guid.NewGuid();
+            Budget.BudgetName = "test " + i;
+            await db.AddBudget(Budget);
+            await Task.Delay(TimeSpan.FromSeconds(2));
+        }
         Budget = new BudgetDataModel();
 
         await BindBudgetCategory();

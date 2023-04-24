@@ -1,4 +1,5 @@
-﻿@if (Budget != null && lstBudgetExpense != null)
+﻿@page "/BudgetDetail/{BudgetId}"
+@if (Budget != null && lstBudgetExpense != null)
 {
     var spent = lstBudgetExpense.Sum(x => x.Amount);
     var remaining = Budget.Budget - spent;
@@ -145,11 +146,13 @@
 }
 @code {
     [Parameter]
+    public string BudgetId { get; set; }
     public BudgetDataModel? Budget { get; set; }
     public List<BudgetExpenseDataModel> lstBudgetExpense { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
+        Budget = await db.GetBudget(BudgetId);
         if (Budget != null)
             lstBudgetExpense = await db.GetExpenseList(Budget.BudgetId);
     }
