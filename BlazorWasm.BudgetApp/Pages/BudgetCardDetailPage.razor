@@ -1,0 +1,156 @@
+﻿@if (Budget != null && lstBudgetExpense != null)
+{
+    var spent = lstBudgetExpense.Sum(x => x.Amount);
+    var remaining = Budget.Budget - spent;
+
+    int percentage = (remaining / Budget.Budget) * 100;
+
+    <div class="grid-lg" style="--accent: 0 65% 50%;">
+        <h1 class="h2">
+            <span class="accent">@Budget.BudgetName</span>
+            Overview
+        </h1>
+        <div class="flex-lg">
+            <div class="budget" style="--accent: 0 65% 50%;">
+                <div class="progress-text">
+                    <h3>@Budget.BudgetName</h3>
+                    <p>$@Budget.Budget.ToString("n2") Budgeted</p>
+                </div>
+                <progress max="1500" value="100">7%</progress>
+                <div class="progress-text">
+                    <small>$@spent.ToString("n2") spent</small>
+                    <small>$@remaining.ToString("n2") remaining</small>
+                </div>
+                <div class="flex-sm">
+                    <form method="post"
+                          action="/budget/b9fbf206-c970-4eaa-9dd7-0ee5778c1405/delete">
+                        <button type="submit" class="btn">
+                            <span>Delete Budget</span>
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 fill="none"
+                                 viewBox="0 0 24 24"
+                                 stroke-width="1.5"
+                                 stroke="currentColor"
+                                 aria-hidden="true"
+                                 width="20">
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"></path>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="form-wrapper">
+                <h2 class="h3">
+                    Add New
+                    <span class="accent">@Budget.BudgetName</span>
+                    Expense
+                </h2>
+                <form method="post"
+                      action="/budget/b9fbf206-c970-4eaa-9dd7-0ee5778c1405"
+                      class="grid-sm">
+                    <div class="expense-inputs">
+                        <div class="grid-xs">
+                            <label for="newExpense">Expense Name</label>
+                            <input type="text"
+                                   name="newExpense"
+                                   id="newExpense"
+                                   placeholder="e.g., Coffee"
+                                   required="" />
+                        </div>
+                        <div class="grid-xs">
+                            <label for="newExpenseAmount">Amount</label>
+                            <input type="number"
+                                   step="0.01"
+                                   inputmode="decimal"
+                                   name="newExpenseAmount"
+                                   id="newExpenseAmount"
+                                   placeholder="e.g., 3.50"
+                                   required="" />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn--dark">
+                        <span>Add Expense</span>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             viewBox="0 0 24 24"
+                             fill="currentColor"
+                             aria-hidden="true"
+                             width="20">
+                            <path fill-rule="evenodd"
+                                  d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z"
+                                  clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="grid-md">
+            <h2>
+                <span class="accent">@Budget.BudgetName</span>
+                Expenses
+            </h2>
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (lstBudgetExpense != null)
+                        {
+                            foreach (var expense in lstBudgetExpense)
+                            {
+                                <tr>
+                                    <td>@expense.ExpenseName</td>
+                                    <td>$@expense.Amount.ToString("n2")</td>
+                                    <td>@expense.ExpenseDateTime.ToString("dd/MMM/yyyy")</td>
+                                    <td>
+                                        <form method="post"
+                                              action="/budget/b9fbf206-c970-4eaa-9dd7-0ee5778c1405">
+                                            <input type="hidden"
+                                                   name="_action"
+                                                   value="deleteExpense" />
+                                            <input type="hidden"
+                                                   name="expenseId"
+                                                   value="82b03593-09a5-4249-bd2c-db6b817b0460" />
+                                            <button type="submit"
+                                                    class="btn btn--warning"
+                                                    aria-label="Delete Coffee expense">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     viewBox="0 0 24 24"
+                                                     fill="currentColor"
+                                                     aria-hidden="true"
+                                                     width="20">
+                                                    <path fill-rule="evenodd"
+                                                          d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z"
+                                                          clip-rule="evenodd"></path>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+@code {
+    [Parameter]
+    public BudgetDataModel? Budget { get; set; }
+    public List<BudgetExpenseDataModel> lstBudgetExpense { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Budget != null)
+            lstBudgetExpense = await db.GetExpenseList(Budget.BudgetId);
+    }
+}
