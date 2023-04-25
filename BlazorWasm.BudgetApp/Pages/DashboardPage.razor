@@ -128,6 +128,7 @@
     protected override async Task OnInitializedAsync()
     {
         UserName = await db.GetUserName();
+        userInfoState.UserName = UserName;
         if (UserName == null && string.IsNullOrEmpty(UserName))
         {
             nav.NavigateTo("/");
@@ -181,7 +182,6 @@
         await localStorage.SetItemAsync<List<BudgetExpenseDataModel>>("Tbl_Expense", lst);
         Expense = new();
         await GetRecentExpenses();
-        await GetRecentBudget();
     }
 
     async Task GetRecentExpenses()
