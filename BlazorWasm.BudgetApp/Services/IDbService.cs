@@ -9,9 +9,10 @@ namespace BlazorWasm.BudgetApp.Services
         Task<List<BudgetDataModel>> GetBudgetList();
         Task<List<BudgetCategoryDataModel>> GetBudgetCategory();
         Task AddBudget(BudgetDataModel budget);
-        Task<List<BudgetExpenseDataModel>> GetExpenseList(Guid guid);
         Task<BudgetExpenseResponseDataModel> BudgetExpensePagination(int pageNo, int pageSize);
         Task<BudgetResponseDataModel> BudgetPagination(int pageNo, int pageSize);
         Task<BudgetDataModel> GetBudget(string guid);
+        Task DeleteExpense(Guid expenseId);
+        Task<List<BudgetExpenseDataModel>> GetExpenseList(Guid? budgetId = null);
     }
 }

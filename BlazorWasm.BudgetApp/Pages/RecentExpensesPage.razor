@@ -16,6 +16,7 @@
                 {
                     foreach (var item in Model.lstExpense)
                     {
+                        string budgetName = lstBudgetCategory.FirstOrDefault(x => x.BudgetId == item.BudgetId)?.BudgetName;
                         <tr>
                             <td>
                                 @(
@@ -23,24 +24,21 @@
                                     )
                             </td>
                             <td>
-                                $@(
-                                   item.Amount
-                                   )
+                                $@(item.Amount.ToString("n2"))
                             </td>
                             <td>
-                                @(
-                                    item.ExpenseDateTime
-                                    )
+                                @(item.ExpenseDateTime.ToString("dd-MM-yyyy hh:mm:ss tt"))
                             </td>
                             <td>
                                 <a href="javascript:void(0)"
-                                   style="--accent: 0 65% 50%;">
-                                    @(lstBudgetCategory.FirstOrDefault(x => x.BudgetId == item.BudgetId)?.BudgetName)
+                                   style="--accent: @budgetName.ToHexColor()">
+                                    @budgetName
                                 </a>
                             </td>
                             <td>
                                 <button type="button"
-                                        class="btn btn-warning delete-btn"
+                                        class="btn btn-warning"
+                                        @onclick="() => DeleteExpense(item.ExpenseId)"
                                         data-delete-id="@(item.ExpenseId)"
                                         data-budget-id="@(item.BudgetId)"
                                         data-current-page="@Model.CurrentPageNo"
@@ -81,6 +79,9 @@
     public BudgetExpenseResponseDataModel Model { get; set; }
 
     List<BudgetCategoryDataModel> lstBudgetCategory = new();
+    
+    [Parameter]
+    public EventCallback<Guid> OnDeleteExpenseClick { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -107,5 +108,11 @@
     {
         var result = await db.BudgetExpensePagination(pageNo, 5);
         Model = result;
+    }
+
+    async Task DeleteExpense(Guid expenseId)
+    {
+        // await db.DeleteExpense(expenseId);
+        await OnDeleteExpenseClick.InvokeAsync(expenseId);
     }
 }

@@ -6,13 +6,13 @@
 
     int percentage = (remaining / Budget.Budget) * 100;
 
-    <div class="grid-lg" style="--accent: 0 65% 50%;">
+    <div class="grid-lg" style="--accent: @BudgetColor">
         <h1 class="h2">
             <span class="accent">@Budget.BudgetName</span>
             Overview
         </h1>
         <div class="flex-lg">
-            <div class="budget" style="--accent: 0 65% 50%;">
+            <div class="budget" style="--accent: @BudgetColor">
                 <div class="progress-text">
                     <h3>@Budget.BudgetName</h3>
                     <p>$@Budget.Budget.ToString("n2") Budgeted</p>
@@ -149,11 +149,13 @@
     public string BudgetId { get; set; }
     public BudgetDataModel? Budget { get; set; }
     public List<BudgetExpenseDataModel> lstBudgetExpense { get; set; }
+    private string BudgetColor = "";
 
     protected override async Task OnParametersSetAsync()
     {
         Budget = await db.GetBudget(BudgetId);
         if (Budget != null)
             lstBudgetExpense = await db.GetExpenseList(Budget.BudgetId);
+        BudgetColor = Budget?.BudgetName?.ToHexColor();
     }
 }

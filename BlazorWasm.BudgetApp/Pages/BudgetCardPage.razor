@@ -5,15 +5,15 @@
 
     int percentage = (remaining / Budget.Budget) * 100;
 
-    <div class="budget" style="--accent: @(Budget.BudgetName.ToHexColor());">
+    <div class="budget" style="--accent: @(Budget.BudgetName.ToHexColor())">
         <div class="progress-text">
             <h3>@(Budget.BudgetName)</h3>
-            <p>$@(Budget.Budget) Budgeted</p>
+            <p>$@(Budget.Budget.ToString("n2")) Budgeted</p>
         </div>
         <progress max="@Budget.Budget" value="@spent">@percentage%</progress>
         <div class="progress-text">
-            <small>$@(spent) spent</small>
-            <small>$@(remaining) remaining</small>
+            <small>$@(spent.ToString("n2")) spent</small>
+            <small>$@(remaining.ToString("n2")) remaining</small>
         </div>
         <div class="flex-sm">
             <button type="button" class="btn btn-dark" @onclick="() => ViewDetail(Budget)">

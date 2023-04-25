@@ -3,6 +3,7 @@ using BlazorWasm.BudgetApp.Models;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Transactions;
+using MudBlazor.Utilities;
 
 namespace BlazorWasm.BudgetApp.Services
 {
@@ -29,23 +30,29 @@ namespace BlazorWasm.BudgetApp.Services
         {
             var lst = await localStorage.GetItemAsync<List<BudgetDataModel>>("Tbl_Budget");
             lst ??= new();
-            return lst;
+            return lst
+                .OrderByDescending(x => x.BudgetCreationDate)
+                .ToList();
         }
 
         public async Task<BudgetDataModel> GetBudget(string guid)
         {
             var lst = await localStorage.GetItemAsync<List<BudgetDataModel>>("Tbl_Budget");
             lst ??= new();
-            return lst.FirstOrDefault(x=> x.BudgetId == new Guid(guid));
+            return lst.FirstOrDefault(x => x.BudgetId == new Guid(guid));
         }
 
-        public async Task<List<BudgetExpenseDataModel>> GetExpenseList(Guid guid)
+        public async Task<List<BudgetExpenseDataModel>> GetExpenseList(Guid? budgetId = null)
         {
             var result = await localStorage.GetItemAsync<List<BudgetExpenseDataModel>>("Tbl_Expense");
             result ??= new();
-            var lst = result.Where(x => x.BudgetId == guid).ToList();
+            List<BudgetExpenseDataModel> lst = new List<BudgetExpenseDataModel>();
+            if (budgetId != null)
+                lst = result.Where(x => x.BudgetId == budgetId).ToList();
+            else
+                lst = result;
             lst ??= new();
-            return lst;
+            return lst.OrderByDescending(x => x.ExpenseDateTime).ToList();
         }
 
         public async Task<List<BudgetCategoryDataModel>> GetBudgetCategory()
@@ -77,7 +84,8 @@ namespace BlazorWasm.BudgetApp.Services
 
         public async Task<BudgetExpenseResponseDataModel> BudgetExpensePagination(int pageNo, int pageSize)
         {
-            var lst = await localStorage.GetItemAsync<List<BudgetExpenseDataModel>>("Tbl_Expense");
+            var lst = await GetExpenseList();
+            lst ??= new();
             var count = lst.Count;
             int totalPageNo = count / pageSize;
             int result = count % pageSize;
@@ -95,7 +103,8 @@ namespace BlazorWasm.BudgetApp.Services
 
         public async Task<BudgetResponseDataModel> BudgetPagination(int pageNo, int pageSize)
         {
-            var lst = await localStorage.GetItemAsync<List<BudgetDataModel>>("Tbl_Budget");
+            var lst = await GetBudgetList();
+            lst ??= new();
             var count = lst.Count;
             int totalPageNo = count / pageSize;
             int result = count % pageSize;
@@ -109,6 +118,16 @@ namespace BlazorWasm.BudgetApp.Services
                 TotalPageNo = totalPageNo,
                 TotalRowCount = count
             };
+        }
+
+        public async Task DeleteExpense(Guid expenseId)
+        {
+            var lst = await GetExpenseList();
+            var item = lst
+                .FirstOrDefault(x => x.ExpenseId == expenseId);
+            if(item == null)return;
+            lst.Remove(item);
+            await localStorage.SetItemAsync("Tbl_Expense", lst);
         }
     }
 }

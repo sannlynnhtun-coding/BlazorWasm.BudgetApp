@@ -59,14 +59,32 @@ namespace BlazorWasm.BudgetApp
                 // Convert the accent HSL color back to an RGB color
                 var accentRgb = accentHsl.To<Rgb>();
 
+                int h = Convert.ToInt32(accentRgb.R.Remove());
+                int s = Convert.ToInt32(accentRgb.G.Remove());
+                double b = accentRgb.B.Remove();
+                double b2 = b.ToLessThan(30);
+                s += Convert.ToInt32(b > 30 ? b2 - b : 0);
+                int l = Convert.ToInt32(b2);
+                l = 40;
                 // Return the accent color as a string in the --accent: H S% L%; format
-                return $"{Convert.ToInt32(accentRgb.R.Remove())} {Convert.ToInt32(accentRgb.G.Remove())}% {Convert.ToInt32(accentRgb.B.Remove())}%;";
+                return $"{h} {s}% {l}%;";
             }
         }
 
         private static double Remove(this double d)
         {
             return d < 0 ? d * - 1 : d;
+        }
+        
+        public static double ToLessThan(this double str, int lessThanNum)
+        {
+            int num = Convert.ToInt32(str);
+            if(num > lessThanNum)
+            {
+                return ToLessThan(num-1, lessThanNum);
+            }
+
+            return num;
         }
     }
 }
