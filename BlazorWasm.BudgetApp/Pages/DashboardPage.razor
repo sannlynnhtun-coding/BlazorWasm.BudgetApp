@@ -134,7 +134,8 @@
             nav.NavigateTo("/");
         }
         await BindBudgetCategory();
-        await GetRecentExpenses();
+        //await GetRecentExpenses();
+        BudgetExpenseList = await db.GetRecentExpenses();
         await GetRecentBudget();
     }
 
@@ -181,28 +182,28 @@
         lst.Add(Expense);
         await localStorage.SetItemAsync<List<BudgetExpenseDataModel>>("Tbl_Expense", lst);
         Expense = new();
-        await GetRecentExpenses();
+        BudgetExpenseList = await db.GetRecentExpenses();
     }
 
-    async Task GetRecentExpenses()
-    {
-        var lst = await localStorage.GetItemAsync<List<BudgetExpenseDataModel>>("Tbl_Expense");
-        lst ??= new List<BudgetExpenseDataModel>();
-        int count = lst.Count();
-        int rowCount = 5;
-        int totalPageNo = count / rowCount;
-        int result = count % rowCount;
-        if (result > 0)
-            totalPageNo++;
-        BudgetExpenseList = new BudgetExpenseResponseDataModel
-        {
-            CurrentPageNo = 1,
-            lstExpense = lst,
-            RowCount = rowCount,
-            TotalPageNo = totalPageNo,
-            TotalRowCount = count
-        };
-    }
+    //async Task GetRecentExpenses()
+    //{
+    //    var lst = await localStorage.GetItemAsync<List<BudgetExpenseDataModel>>("Tbl_Expense");
+    //    lst ??= new List<BudgetExpenseDataModel>();
+    //    int count = lst.Count();
+    //    int rowCount = 5;
+    //    int totalPageNo = count / rowCount;
+    //    int result = count % rowCount;
+    //    if (result > 0)
+    //        totalPageNo++;
+    //    BudgetExpenseList = new BudgetExpenseResponseDataModel
+    //    {
+    //        CurrentPageNo = 1,
+    //        lstExpense = lst,
+    //        RowCount = rowCount,
+    //        TotalPageNo = totalPageNo,
+    //        TotalRowCount = count
+    //    };
+    //}
 
     async Task GetRecentBudget()
     {
@@ -229,6 +230,7 @@
     {
         await db.DeleteExpense(expenseId);
         await GetRecentBudget();
-        await GetRecentExpenses();
+        //await db.GetRecentExpenses();
+        BudgetExpenseList = await db.GetRecentExpenses();
     }
 }

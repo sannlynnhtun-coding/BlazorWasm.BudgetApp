@@ -129,5 +129,35 @@ namespace BlazorWasm.BudgetApp.Services
             lst.Remove(item);
             await localStorage.SetItemAsync("Tbl_Expense", lst);
         }
+
+        public async Task DeleteBudget(Guid budgetId)
+        {
+            var lst = await GetBudgetList();
+            var item = lst
+                .FirstOrDefault(x => x.BudgetId == budgetId);
+            if (item == null) return;
+            lst.Remove(item);
+            await localStorage.SetItemAsync("Tbl_Budget", lst);
+        }
+
+        public async Task<BudgetExpenseResponseDataModel> GetRecentExpenses()
+        {
+            var lst = await localStorage.GetItemAsync<List<BudgetExpenseDataModel>>("Tbl_Expense");
+            lst ??= new List<BudgetExpenseDataModel>();
+            int count = lst.Count();
+            int rowCount = 5;
+            int totalPageNo = count / rowCount;
+            int result = count % rowCount;
+            if (result > 0)
+                totalPageNo++;
+            return new BudgetExpenseResponseDataModel
+            {
+                CurrentPageNo = 1,
+                lstExpense = lst,
+                RowCount = rowCount,
+                TotalPageNo = totalPageNo,
+                TotalRowCount = count
+            };
+        }
     }
 }

@@ -13,6 +13,8 @@ namespace BlazorWasm.BudgetApp.Services
         Task<BudgetResponseDataModel> BudgetPagination(int pageNo, int pageSize);
         Task<BudgetDataModel> GetBudget(string guid);
         Task DeleteExpense(Guid expenseId);
+        Task DeleteBudget(Guid budgetId);
         Task<List<BudgetExpenseDataModel>> GetExpenseList(Guid? budgetId = null);
+        Task<BudgetExpenseResponseDataModel> GetRecentExpenses();
     }
 }
