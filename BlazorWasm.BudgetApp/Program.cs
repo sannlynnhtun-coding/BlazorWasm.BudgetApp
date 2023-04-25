@@ -15,5 +15,6 @@ builder.Services.AddSingleton<IDbService, LocalStorageService>();
 //builder.Services.AddSingleton<IDbService, ApiService>();
 
 builder.Services.AddMudServices();
-
+//builder.Services.AddSingleton<UserInfoState>();
+builder.Services.AddScoped<UserInfoState>();
 await builder.Build().RunAsync();
