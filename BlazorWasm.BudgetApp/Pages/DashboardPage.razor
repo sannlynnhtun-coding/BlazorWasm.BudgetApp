@@ -13,21 +13,21 @@
                         <label for="newBudget">Budget Name</label>
                         <input type="text"
                                name="newBudget"
-                        @bind-value="Budget.BudgetName"
+                               @bind-value="Budget.BudgetName"
                                placeholder="e.g., Groceries"
-                               required="" />
+                               required=""/>
                     </div>
                     <div class="grid-xs">
                         <label for="newBudgetAmount">Amount</label>
                         <input type="number"
                                step="0.01"
                                name="newBudgetAmount"
-                        @bind-value="Budget.Budget"
+                               @bind-value="Budget.Budget"
                                placeholder="e.g., $350"
                                required=""
-                               inputmode="decimal" />
+                               inputmode="decimal"/>
                     </div>
-                    <input type="hidden" name="_action" value="createBudget" />
+                    <input type="hidden" name="_action" value="createBudget"/>
                     <button type="button" @onclick="CreateBudget" class="btn btn-dark">
                         <span>Create budget</span>
                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -38,7 +38,8 @@
                             <path d="M10.464 8.746c.227-.18.497-.311.786-.394v2.795a2.252 2.252 0 01-.786-.393c-.394-.313-.546-.681-.546-1.004 0-.323.152-.691.546-1.004zM12.75 15.662v-2.824c.347.085.664.228.921.421.427.32.579.686.579.991 0 .305-.152.671-.579.991a2.534 2.534 0 01-.921.42z"></path>
                             <path fill-rule="evenodd"
                                   d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v.816a3.836 3.836 0 00-1.72.756c-.712.566-1.112 1.35-1.112 2.178 0 .829.4 1.612 1.113 2.178.502.4 1.102.647 1.719.756v2.978a2.536 2.536 0 01-.921-.421l-.879-.66a.75.75 0 00-.9 1.2l.879.66c.533.4 1.169.645 1.821.75V18a.75.75 0 001.5 0v-.81a4.124 4.124 0 001.821-.749c.745-.559 1.179-1.344 1.179-2.191 0-.847-.434-1.632-1.179-2.191a4.122 4.122 0 00-1.821-.75V8.354c.29.082.559.213.786.393l.415.33a.75.75 0 00.933-1.175l-.415-.33a3.836 3.836 0 00-1.719-.755V6z"
-                                  clip-rule="evenodd"></path>
+                                  clip-rule="evenodd">
+                            </path>
                         </svg>
                     </button>
                 </div>
@@ -53,9 +54,9 @@
                             <label for="newExpense">Expense Name</label>
                             <input type="text"
                                    name="newExpense"
-                            @bind-value="Expense.ExpenseName"
+                                   @bind-value="Expense.ExpenseName"
                                    placeholder="e.g., Coffee"
-                                   required="" />
+                                   required=""/>
                         </div>
                         <div class="grid-xs">
                             <label for="newExpenseAmount">Amount</label>
@@ -63,15 +64,15 @@
                                    step="0.01"
                                    inputmode="decimal"
                                    name="newExpenseAmount"
-                            @bind-value="Expense.Amount"
+                                   @bind-value="Expense.Amount"
                                    placeholder="e.g., 3.50"
-                                   required="" />
+                                   required=""/>
                         </div>
                     </div>
                     <div class="grid-xs">
                         <label for="newExpenseBudget">Budget Category</label>
                         <select name="newExpenseBudget"
-                        @bind="Expense.BudgetId"
+                                @bind="Expense.BudgetId"
                                 required="">
                             @foreach (var item in lstBudgetCategory)
                             {
@@ -90,28 +91,31 @@
                              width="20">
                             <path fill-rule="evenodd"
                                   d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z"
-                                  clip-rule="evenodd"></path>
+                                  clip-rule="evenodd">
+                            </path>
                         </svg>
                     </button>
                 </div>
             </div>
             @*<div id="BudgetDetail"></div>*@
             <div class="grid-md">
+                <h2>Existing Budgets</h2>
                 @if (BudgetList != null)
                 {
-                    <RecentBudgetListPage Model="BudgetList" />
+                    <RecentBudgetListPage Model="BudgetList"/>
                 }
             </div>
             <div class="grid-md">
                 <h2>Recent Expenses</h2>
                 @if (BudgetExpenseList != null)
                 {
-                    <RecentExpensesPage Model="BudgetExpenseList" />
+                    <RecentExpensesPage Model="BudgetExpenseList"/>
                 }
             </div>
         </div>
     </div>
 </div>
+
 @code {
     private string UserName = "";
     private BudgetDataModel Budget = new();
@@ -134,12 +138,12 @@
 
     async Task CreateBudget()
     {
-        //List<BudgetDataModel> lst = await localStorage.GetItemAsync<List<BudgetDataModel>>("Tbl_Budget");
-        //lst ??= new();
-        //Budget.UserId = UserName;
-        //Budget.BudgetCreationDate = DateTime.Now;
-        //lst.Add(Budget);
-        //await localStorage.SetItemAsync<List<BudgetDataModel>>("Tbl_Budget", lst);
+    //List<BudgetDataModel> lst = await localStorage.GetItemAsync<List<BudgetDataModel>>("Tbl_Budget");
+    //lst ??= new();
+    //Budget.UserId = UserName;
+    //Budget.BudgetCreationDate = DateTime.Now;
+    //lst.Add(Budget);
+    //await localStorage.SetItemAsync<List<BudgetDataModel>>("Tbl_Budget", lst);
 
         await db.AddBudget(Budget);
         for (int i = 1; i <= 1000; i++)
@@ -190,33 +194,34 @@
         if (result > 0)
             totalPageNo++;
         BudgetExpenseList = new BudgetExpenseResponseDataModel
-            {
-                CurrentPageNo = 1,
-                lstExpense = lst,
-                RowCount = rowCount,
-                TotalPageNo = totalPageNo,
-                TotalRowCount = count
-            };
+        {
+            CurrentPageNo = 1,
+            lstExpense = lst,
+            RowCount = rowCount,
+            TotalPageNo = totalPageNo,
+            TotalRowCount = count
+        };
     }
 
     async Task GetRecentBudget()
     {
-        //var lst = await localStorage.GetItemAsync<List<BudgetDataModel>>("Tbl_Budget");
-        //int count = lst.Count();
-        //int rowCount = 4;
-        //int totalPageNo = count / rowCount;
-        //int result = count % rowCount;
-        //if (result > 0)
-        //    totalPageNo++;
-        //BudgetList = new BudgetResponseDataModel
-        //    {
-        //        CurrentPageNo = 1,
-        //        lstBudget = lst,
-        //        RowCount = rowCount,
-        //        TotalPageNo = totalPageNo,
-        //        TotalRowCount = count
-        //    };
+    //var lst = await localStorage.GetItemAsync<List<BudgetDataModel>>("Tbl_Budget");
+    //int count = lst.Count();
+    //int rowCount = 4;
+    //int totalPageNo = count / rowCount;
+    //int result = count % rowCount;
+    //if (result > 0)
+    //    totalPageNo++;
+    //BudgetList = new BudgetResponseDataModel
+    //    {
+    //        CurrentPageNo = 1,
+    //        lstBudget = lst,
+    //        RowCount = rowCount,
+    //        TotalPageNo = totalPageNo,
+    //        TotalRowCount = count
+    //    };
         var result = await db.BudgetPagination(1, 4);
         BudgetList = result;
     }
+
 }

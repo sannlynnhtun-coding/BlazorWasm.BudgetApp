@@ -5,7 +5,7 @@
 
     int percentage = (remaining / Budget.Budget) * 100;
 
-    <div class="budget" style="-accent: 34 65% 50%;">
+    <div class="budget" style="--accent: @(Budget.BudgetName.ToHexColor());">
         <div class="progress-text">
             <h3>@(Budget.BudgetName)</h3>
             <p>$@(Budget.Budget) Budgeted</p>
