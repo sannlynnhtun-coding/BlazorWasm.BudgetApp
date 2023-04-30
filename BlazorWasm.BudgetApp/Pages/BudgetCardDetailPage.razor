@@ -25,7 +25,7 @@
                 <div class="flex-sm">
                     <form method="post"
                           action="/budget/b9fbf206-c970-4eaa-9dd7-0ee5778c1405/delete">
-                        <button type="button" @onclick="()=> DeleteBudget(Budget.BudgetId)" class="btn-danger">
+                        <button type="button" @onclick="()=> DeleteBudget(Budget.BudgetId)" class="btn btn-danger">
                             <span>Delete Budget</span>
                             <svg xmlns="http://www.w3.org/2000/svg"
                                  fill="none"
@@ -114,6 +114,7 @@
         if (Budget != null)
             lstBudgetExpense = await db.GetExpenseList(Budget.BudgetId);
         BudgetColor = Budget?.BudgetName?.ToHexColor();
+        BudgetExpenseList = await db.GetRecentExpenses();
     }
 
     async Task AddExpense()
